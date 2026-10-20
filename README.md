@@ -55,17 +55,6 @@ Depending on the implementation, you may need:
 - Python or Node.js
 - An API key for your chosen AI provider, if required
 
-### Installation
-
-Clone the repository:
-
-```bash
-git clone https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git
-cd YOUR_REPOSITORY
-```
-
-Follow the installation and configuration instructions provided by the project once they become available.
-
 ### Configuration
 
 If the project uses an external AI API, create a `.env` file to store the required configuration:
@@ -107,7 +96,4 @@ Atri and the original character designs, story, and associated intellectual prop
 A license has not yet been specified. A license can be added once the project's distribution and usage terms have been decided.
 
 ---
-
-<p align="center">
-  <i>「 I want to be useful to you! 」</i> 💙
-</p>
+> *"I want to be useful to you!"* 💙
