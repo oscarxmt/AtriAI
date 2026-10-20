@@ -1,4 +1,4 @@
-from .layout import COLORS, FONTS, WINDOW_SIZE, WINDOW_TRANSPARENCY
+#from .layout import COLORS, FONTS, WINDOW_SIZE, WINDOW_TRANSPARENCY
 import customtkinter as ctk
 import os
 # We gotta add imports here so this remains unchanged
@@ -12,7 +12,7 @@ class AtriWindow:
         # Window setup :)
         self.root = ctk.CTk()
         self.root.title("AtriAI")
-        self.root.geometry("400x90")
+        self.root.geometry("400x100")
         self.root.attributes("-alpha", 0.92)  # here we set the transparency I learned this from Davinci reslove :3
         
         # making input box
