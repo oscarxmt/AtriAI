@@ -2,7 +2,7 @@ import customtkinter as ctk
 from PIL import Image
 import os
 
-# this will be useful later indeed ;3
+# this will be useful later indeed ;3 
 EXE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 class AtriWindow:
