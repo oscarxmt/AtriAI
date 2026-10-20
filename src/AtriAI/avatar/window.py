@@ -1,7 +1,7 @@
+from .layout import COLORS, FONTS, WINDOW_SIZE, WINDOW_TRANSPARENCY
 import customtkinter as ctk
-from PIL import Image
 import os
-
+# We gotta add imports here so this remains unchanged
 # this will be useful later indeed ;3
 EXE_DIR = os.path.dirname(os.path.abspath(__file__))
 
