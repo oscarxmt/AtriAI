@@ -1,0 +1,5 @@
+
+
+AI_PROMPT =""" 
+SET COSTUME PROMPT HERE
+"""
