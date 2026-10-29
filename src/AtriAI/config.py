@@ -6,3 +6,4 @@ CONTEXT_WINDOW = 2048
 # Setting App configurations
 WINDOWED_MODE = True
 EXECUTE_ON_STARTUP = False
+

@@ -9,7 +9,7 @@ if (Test-Path $Arti_Installer_Path -PathType Container -eq "false") {
 Write-Host "[+] Uninstalling Atri..."
 Remove-Item -Path $Arti_Installer_Path -Recurse -Force
 
-if (Test-Path $Arti_Installer_Path -PathType Container) {
+if (Test-Path $Arti_Installer_Path -PathType Container -eq "false") {
     Write-Host "[+] Atri has been successfully uninstalled."
     exit
 }
