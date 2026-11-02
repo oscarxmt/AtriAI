@@ -15,6 +15,11 @@
 
 # with in venv do this to run.  python src/AtriAI/main.py
 
+
+# also for your api key made a .env file in the root of the project and add this line to it.  API_KEY=your_api_key_here
+
+from dotenv import load_dotenv
+#load_dotenv()  Load environment variables from .env file im too scared too keep this uncommeted
 from AtriAI.avatar.window import AtriWindow
 
 if __name__ == "__main__":
