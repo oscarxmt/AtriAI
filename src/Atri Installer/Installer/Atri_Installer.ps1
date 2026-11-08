@@ -37,7 +37,7 @@ $Start_App_Prompt = Read-Host "[?] Do you want to run Atri (Y/N)"
 
 $User_Formatted_Prompt = $Start_App_Prompt.ToLower()
 
-if $User_Formatted_Prompt -eq "y" {
+if ($User_Formatted_Prompt -eq "y") {
     Write-Host "[+] Starting Atri..."
     Start-Process -Filepath "$LocalAppData\Atri_Installer\" # give the main executable name here after the path
     exit
