@@ -1,49 +1,88 @@
+$ErrorActionPreference = "Stop"
+
+$ZipPath = Join-Path $TEMP "Atri_Installer.zip"
+$InstallZip = Join-Path $LocalAppData "Atri_Installer.zip"
+$InstallPath = Join-Path $LocalAppData "Atri_Installer"
+
+try {
+
+    Write-Host "[+] Downloading the latest version of Atri..."
+    $Download = & curl.exe -X GET -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:131.0) Gecko/20100101 Firefox/131.0" --fail --location --silent --show-error $LatestReleaseURI --output $ZipPath
+
+    if ($LASTEXITCODE -ne 0) {
+        throw "Download failed aw man. curl.exe exit code: $LASTEXITCODE"
+    }
+
+    if (!(Test-Path $ZipPath -PathType Leaf)) {
+        throw "Downloaded ZIP file does not exist. BRUH"
+    }
+
+    if ((Get-Item $ZipPath).Length -eq 0) {
+        throw "Downloaded ZIP file is empty check the URI."
+    }
+
+    Write-Host "[+] Download completed successfully."
+    Write-Host "[+] Validating ZIP archive..."
 
 
-Write-Host "[+] Starting Atri Installer..."
+    # WOO .NET MY LOVE
+    Add-Type -AssemblyName System.IO.Compression.FileSystem
+    $Archive = [System.IO.Compression.ZipFile]::OpenRead($ZipPath)
+    try {
+        if ($Archive.Entries.Count -eq 0) {
+            throw "ZIP archive doesn't contain any files."
+        }
+    }
+    finally {
+        $Archive.Dispose()
+    }
 
-# Setting env variables for windows
-$TEMP = $env:TEMP
-$LocalAppData = $env:LOCALAPPDATA
+    Write-Host "[+] ZIP archive found."
+    Write-Host "[+] Preparing installation..."
 
-Write-Host "[+] Finding the latest version of Atri..."
+    # Moving the zip file :)
+    Move-Item -Path $ZipPath -Destination $InstallZip -Force
+    Write-Host "[+] Extracting Atri Installer..."
 
-$LatestReleaseURI = "" # put the lastest release URI HERE LOL
+    if (Test-Path $InstallPath) {
+        Remove-Item -Path $InstallPath -Recurse -Force
+    }
+    # unzipping lil freaky
+    Expand-Archive -Path $InstallZip -DestinationPath $InstallPath -Force -ErrorAction Stop
 
-Write-host "[+] Downloading the latest version of Atri..."
+    # Verifying unzip
+    if (!(Test-Path $InstallPath -PathType Container)) {
+        throw "Installation directory was not unzipped."
+    }
 
-curl.exe $LatestReleaseURI --output "$TEMP\Atri_Installer.zip"
+    $ExtractedFiles = Get-ChildItem -Path $InstallPath -Recurse -File
 
-Write-Host "[+] Installing Atri..."
+    if ($ExtractedFiles.Count -eq 0) {
+        throw "Extraction completed but no files were found. :("
+    }
 
-Move-Item -Path "$TEMP\Atri_Installer.zip" -Destination "$LocalAppData\Atri_Installer.zip" -Force
-Expand-Archive -Path "$LocalAppData\Atri_Installer.zip" -DestinationPath "$LocalAppData\Atri_Installer" -Force
+    Write-Host "[+] Atri Installer has been successfully installed."
+    Write-Host "[+] Installation path: $InstallPath"
 
-if (Test-Path "$LocalAppData\Atri_Installer" -PathType Container) {
-
-    Write-Host "[+] Atri Installer has been successfully installed. On this machine, you can find it at $LocalAppData\Atri_Installer"
-
-} 
-else {
-    Write-Host "[-] Atri Installer installation failed. QUITTING..."
-    exit
 }
+catch {
+    Write-Host "[-] Installation failed! FREAK OUT TIME!" -ForegroundColor Red
+    Write-Host "[-] Error: $($_.Exception.Message)" -ForegroundColor Red
+    exit 1
 
-Write-host "[+] Cleaning up temporary files..."
-Remove-Item -Path "$TEMP\Atri_Installer.zip" -Force
-Remove-Item -Path "$LocalAppData\Atri_Installer.zip" -Force
+}
+finally {
 
-$Start_App_Prompt = Read-Host "[?] Do you want to run Atri (Y/N)"
+    Write-Host "[+] Cleaning up temporary files..."
 
-$User_Formatted_Prompt = $Start_App_Prompt.ToLower()
+    if (Test-Path $ZipPath) {
+        Remove-Item -Path $ZipPath -Force -ErrorAction SilentlyContinue
+    }
 
-if ($User_Formatted_Prompt -eq "y") {
-    Write-Host "[+] Starting Atri..."
-    Start-Process -Filepath "$LocalAppData\Atri_Installer\" # give the main executable name here after the path
-    exit
-} 
-else {
-    Write-Host "[+] You can start Atri later by running the executable located at $LocalAppData\Atri_Installer\Atri.exe"
-    Write-Host "[+] Exiting..."
-    exit
+    if (Test-Path $InstallZip) {
+        Remove-Item -Path $InstallZip -Force -ErrorAction SilentlyContinue
+    }
+
+    Write-Host "[+] Cleanup completed. WOO HOO!"
+
 }

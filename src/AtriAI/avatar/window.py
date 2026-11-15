@@ -1,9 +1,5 @@
 from AtriAI.avatar.layout import COLORS, FONTS, WINDOW_SIZE, WINDOW_TRANSPARENCY # importing from layout config python file 
 import customtkinter as ctk
-import os
-
-# this will be useful later indeed ;3 
-EXE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 class AtriWindow: 
     def __init__(self):

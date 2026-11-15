@@ -4,7 +4,6 @@ $LatestReleaseURI = "" # put the lastest release URI HERE LOL
 $TEMP = $env:TEMP
 $Arti_Installer_Path = "$env:LOCALAPPDATA\Atri_Installer"
 
-
 if (Test-Path $Arti_Installer_Path -PathType Container -eq "false") {
     Write-Host "[-] Could not find Atri path.... QUITTING..."
     exit
