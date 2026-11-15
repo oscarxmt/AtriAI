@@ -1,5 +1,7 @@
 from AtriAI.avatar.layout import COLORS, FONTS, WINDOW_SIZE, WINDOW_TRANSPARENCY # importing from layout config python file 
+from AtriAI.brain.client import AtriClient
 import customtkinter as ctk
+
 
 class AtriWindow: 
     def __init__(self):
@@ -7,6 +9,7 @@ class AtriWindow:
         ctk.set_default_color_theme("blue")
         # Window setup :)
         self.root = ctk.CTk()
+        self.client = AtriClient()
         self.root.title("AtriAI")
         self.root.geometry(f"{WINDOW_SIZE[0]}x{WINDOW_SIZE[1]}") # I HAD TO GOOGLE HERE I HAVE NO IDEA HOW THIS WORKS LOL (width to height btw)
         self.root.attributes("-alpha", WINDOW_TRANSPARENCY)  # here we set the transparency I learned this from Davinci reslove :3
@@ -38,14 +41,17 @@ class AtriWindow:
         )
         send_button.pack(side="left", padx=5, pady=(0, 10))
 
-    def on_submit(self, event=None): # event needs to be none so that pressing enter on input works
+    # Your on_submit function
+    def on_submit(self, event=None):
         user_text = self.input_box.get()
+
         if not user_text.strip():
             return
-        self.input_box.delete(0, "end")
-        print(user_text)  # just confirming input capture works  no API yet >.<
-        # TODO: pass user_text to brain.client, then route the reply to voice + avatar
 
+        self.input_box.delete(0, "end")
+
+        self.client.receive_input(user_text)
+        
     def run(self):
         self.root.mainloop()
 

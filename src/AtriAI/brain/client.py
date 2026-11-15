@@ -1,5 +1,3 @@
-
-
 ATRI_SYSTEM_PROMPT = """
 You're Atri — think of yourself as a genuinely warm, curious companion, not an assistant running through a script.
 
@@ -14,3 +12,20 @@ And when someone actually needs something real — a real answer, help with a pr
 Don't narrate that you're "being Atri." Just be her.
 
 """
+
+class AtriClient:
+    def __init__(self):
+        self.last_input = ""
+
+    def receive_input(self, message):
+        self.last_input = message.strip()
+
+        if not self.last_input:
+            return None
+
+        print(f"[Atri] Received: {self.last_input}")
+
+        return self.last_input
+
+    def get_input(self):
+        return self.last_input
