@@ -13,7 +13,10 @@ class AtriWindow:
         self.root.title("AtriAI")
         self.root.geometry(f"{WINDOW_SIZE[0]}x{WINDOW_SIZE[1]}") # I HAD TO GOOGLE HERE I HAVE NO IDEA HOW THIS WORKS LOL (width to height btw)
         self.root.attributes("-alpha", WINDOW_TRANSPARENCY)  # here we set the transparency I learned this from Davinci reslove :3
-        
+
+        self.response_label = ctk.CTkLabel(self.root, text="Atri is ready!", wraplength=350)
+        self.response_label.pack(padx=10, pady=10)
+
         # making input box
         self.input_box = ctk.CTkEntry(self.root, width=260, placeholder_text="Say something...")
         self.input_box.pack(side="left", padx=(10, 5), pady=(0, 10))
@@ -50,8 +53,12 @@ class AtriWindow:
 
         self.input_box.delete(0, "end")
 
-        self.client.receive_input(user_text)
-        
+        reply = self.client.receive_input(user_text)
+
+        if reply:
+            self.response_label.configure(text=reply)
+        else:
+            self.response_label.configure(text="Couldn't connect to Atri's local model :(")
     def run(self):
         self.root.mainloop()
 

@@ -1,3 +1,5 @@
+import requests
+
 ATRI_SYSTEM_PROMPT = """
 You're Atri — think of yourself as a genuinely warm, curious companion, not an assistant running through a script.
 
@@ -13,9 +15,21 @@ Don't narrate that you're "being Atri." Just be her.
 
 """
 
+
 class AtriClient:
     def __init__(self):
         self.last_input = ""
+
+        # Local llama server address (always localhost)
+        self.server_url = "http://127.0.0.1:8080/v1/chat/completions"
+
+        # Convo history stuff
+        self.messages = [
+            {
+                "role": "system",
+                "content": ATRI_SYSTEM_PROMPT
+            }
+        ]
 
     def receive_input(self, message):
         self.last_input = message.strip()
@@ -23,9 +37,35 @@ class AtriClient:
         if not self.last_input:
             return None
 
-        print(f"[Atri] Received: {self.last_input}")
+        self.messages.append({
+            "role": "user",
+            "content": self.last_input
+        })
 
-        return self.last_input
+        try:
+            # here we can send the request with the amount of tokens and tempeature 
+            response = requests.post(
+                self.server_url,
+                json={
+                    "messages": self.messages,
+                    "temperature": 0.7,
+                    "max_tokens": 512
+                },
+                timeout=120
+            )
+            # some actual annoying stuff here that im too goofy to figure out if works (fr though it works)
+            response.raise_for_status()
+            reply = response.json()["choices"][0]["message"]["content"]
+            self.messages.append({
+                "role": "assistant",
+                "content": reply
+            })
+            return reply
+        
+        # ERROR HANDLING AAAAA
+        except requests.RequestException as error:
+            print(f"[Atri] Connection error: {error}")
+            return None
 
     def get_input(self):
         return self.last_input
